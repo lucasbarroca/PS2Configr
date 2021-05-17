@@ -56,6 +56,7 @@ namespace PS2Configr
             Program.frmMain.games = Program.frmMain.games.OrderBy(q => q.Name).ToList();
 
             Program.frmMain.SaveGames();
+            Program.LoadConfig();
             Program.frmMain.RepopulateGamesList();
 
             Close();

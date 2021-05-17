@@ -39,12 +39,12 @@ namespace PS2Configr
         {
             // Copy global pad configs to game config folder
             if (UseGlobalPad && System.IO.File.Exists("LilyPad.ini"))
-                System.IO.File.Copy("LilyPad.ini", @"Configs\" + Name + @"\LilyPad.ini", true);
+                System.IO.File.Copy("LilyPad.ini", @"Configs\" + UniqueID + @"\LilyPad.ini", true);
 
             // Start game and get it's process
             Process p = Process.Start(Properties.Settings.Default.PCSX2Path,
                 @"""" + Path.Combine(Properties.Settings.Default.DefaultDiskPath, File) + @"""" +
-                @" --cfgpath """ + Path.Combine(Environment.CurrentDirectory, @"Configs\" + Name) + @"""" +
+                @" --cfgpath """ + Path.Combine(Environment.CurrentDirectory, @"Configs\" + UniqueID) + @"""" +
 
                 (NoGUI ? @" --nogui" : @" --console") +
                 (Fullscreen ? @" --fullscreen" : @""));
@@ -61,11 +61,11 @@ namespace PS2Configr
         {
             // Copy global pad configs to game config folder
             if (UseGlobalPad && System.IO.File.Exists("LilyPad.ini"))
-                System.IO.File.Copy("LilyPad.ini", @"Configs\" + Name + @"\LilyPad.ini", true);
+                System.IO.File.Copy("LilyPad.ini", @"Configs\" + UniqueID + @"\LilyPad.ini", true);
 
             // Start emulator with selected game for configuration purposes
             Process.Start(Properties.Settings.Default.PCSX2Path,
-                @"--cfgpath """ + Path.Combine(Environment.CurrentDirectory, @"Configs\" + Name) + @"""");
+                @"--cfgpath """ + Path.Combine(Environment.CurrentDirectory, @"Configs\" + UniqueID) + @"""");
         }
     }
 

@@ -53,15 +53,6 @@ namespace PS2Configr
                 LoadConfig();
             }
 
-            // Create games config folders if not exists
-            foreach (Game g in Games)
-            {
-                if (!Directory.Exists(@"Configs\" + g.Name))
-                {
-                    Directory.CreateDirectory(@"Configs\" + g.Name);
-                }
-            }
-
             // Check for command line arguments
             List<string> arguments = new List<string>(Environment.GetCommandLineArgs());
 
@@ -146,9 +137,20 @@ namespace PS2Configr
                 var newCfg = new List<Game>();
                 foreach (GameV1 v1Game in oldCfg)
                 {
+                    // Get game data
                     var newGame = new Game(v1Game.Name, v1Game.File, v1Game.NoGUI, v1Game.Fullscreen, v1Game.UseGlobalPad);
+                    
+                    // Generate it a unique id
                     GenerateUniqueGameId(newCfg, newGame);
-                    newCfg.Add(newGame);                
+
+                    // Rename game name on list
+                    newGame.Name = Path.GetFileNameWithoutExtension(newGame.File);
+
+                    // Add to new game list
+                    newCfg.Add(newGame);
+
+                    // Rename game config folder
+                    Directory.Move($"Configs/{newGame.Name}", $"Configs/{newGame.UniqueID}");
                 }
 
                 // Save the config
@@ -157,6 +159,8 @@ namespace PS2Configr
 
                 // Rename old config
                 File.Move("config.xml", "config.old.xml");
+
+                CreateNeededFolders();
             }
         }
 
@@ -175,6 +179,20 @@ namespace PS2Configr
         {
             string jsonData = File.ReadAllText("config.json");
             Games = JsonConvert.DeserializeObject<List<Game>>(jsonData);
+
+            CreateNeededFolders();
+        }
+
+        static void CreateNeededFolders()
+        {
+            // Create games config folders if not exists
+            foreach (Game g in Games)
+            {
+                if (!Directory.Exists(@"Configs\" + g.UniqueID))
+                {
+                    Directory.CreateDirectory(@"Configs\" + g.UniqueID);
+                }
+            }
         }
 
         public static void GenerateUniqueGameId(List<Game> gameList, Game game)
@@ -215,6 +233,8 @@ namespace PS2Configr
 
         public static string GetSafeGameName(string PathName)
         {
+            return PathName;
+
             foreach (char c in Path.GetInvalidPathChars())
                 PathName = PathName.Replace(c.ToString(), string.Empty);
 

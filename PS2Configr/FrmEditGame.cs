@@ -61,7 +61,7 @@ namespace PS2Configr
 
             try
             {
-                Directory.Move(@"Configs\" + oldName, @"Configs\" + Program.frmMain.games[gID].Name);
+                //Directory.Move(@"Configs\" + oldName, @"Configs\" + Program.frmMain.games[gID].Name);
             }
             catch
             {
