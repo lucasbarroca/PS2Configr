@@ -52,7 +52,7 @@ namespace PS2Configr
         private void btSave_Click(object sender, EventArgs e)
         {
             Program.frmMain.games[gID].File = txtGamePath.Text;
-            Program.frmMain.games[gID].Name = PS2ConfigrFunctions.GetSafeGameName(txtGameName.Text);
+            Program.frmMain.games[gID].Name = Program.GetSafeGameName(txtGameName.Text);
 
             Program.frmMain.games[gID].NoGUI= chkNoGUI.Checked;
             Program.frmMain.games[gID].Fullscreen = chkFull.Checked;
@@ -69,7 +69,7 @@ namespace PS2Configr
             }
 
             Program.frmMain.SaveGames();
-            Program.frmMain.LoadGames();
+            Program.frmMain.RepopulateGamesList();
 
             Close();
         }
@@ -84,7 +84,7 @@ namespace PS2Configr
             catch { }
 
             if (oGamePath.ShowDialog() == DialogResult.OK)
-                txtGamePath.Text = PS2ConfigrFunctions.GetRelativePath(oGamePath.FileName);
+                txtGamePath.Text = Program.GetRelativePath(oGamePath.FileName);
         }
 
         private void btCancel_Click(object sender, EventArgs e)

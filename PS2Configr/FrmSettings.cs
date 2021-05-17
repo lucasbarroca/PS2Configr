@@ -60,7 +60,7 @@ namespace PS2Configr
             catch { }
 
             if (oEmuPath.ShowDialog() == DialogResult.OK)
-                txtEmuPath.Text = PS2ConfigrFunctions.GetRelativePath(oEmuPath.FileName);
+                txtEmuPath.Text = Program.GetRelativePath(oEmuPath.FileName);
         }
 
         private void btDiskPath_Click(object sender, EventArgs e)
@@ -72,7 +72,7 @@ namespace PS2Configr
             catch { }
 
             if (fbDiskPath.ShowDialog() == DialogResult.OK)
-                txtDiskPath.Text = PS2ConfigrFunctions.GetRelativePath(fbDiskPath.SelectedPath);
+                txtDiskPath.Text = Program.GetRelativePath(fbDiskPath.SelectedPath);
         }
 
         private void txtDiskPath_TextChanged(object sender, EventArgs e)

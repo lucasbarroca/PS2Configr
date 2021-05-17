@@ -23,7 +23,26 @@ namespace PS2Configr
         [STAThread]
         static void Main()
         {
-            // Load everything
+            // Check app core needed before anything
+            bool settingsOK = false;
+            while (!settingsOK)
+            {
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.PCSX2Path))
+                    settingsOK = File.Exists(Path.GetFullPath(Properties.Settings.Default.PCSX2Path));
+
+                if (!settingsOK)
+                {
+                    MessageBox.Show("You need to configure settings!", "Settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    new FrmSettings().ShowDialog();
+                }
+            }
+
+            if (!Directory.Exists("Configs"))
+            {
+                Directory.CreateDirectory("Configs");
+            }
+
+            // Load Games list
             // Check for old format config file
             if (File.Exists("config.xml"))
             {
@@ -43,7 +62,53 @@ namespace PS2Configr
                 }
             }
 
-            // Start forms
+            // Check for command line arguments
+            List<string> arguments = new List<string>(Environment.GetCommandLineArgs());
+
+            foreach (string arg in arguments)
+            {
+                if (arg == "-id" || arg == "-config")
+                {
+                    int uid = int.Parse(arg);
+                    foreach (Game g in Games)
+                    {
+                        if (g.UniqueID == uid)
+                        {
+                            if (arg == "-id")
+                            {
+                                g.Launch();
+                            }
+                            else
+                            {
+                                g.LaunchConfig();
+                            }
+                        }
+                    }
+
+                    Environment.Exit(0);
+                }
+                else if (arg == "-name" || arg == "-configname")
+                {
+                    foreach (Game g in Games)
+                    {
+                        if (g.Name == arg)
+                        {
+                            if (arg == "-name")
+                            {
+                                g.Launch();
+                            }
+                            else
+                            {
+                                g.LaunchConfig();
+                            }
+                        }
+                    }
+
+                    Environment.Exit(0);
+                }
+            }
+
+            // Start main form
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             frmMain = new FrmMain();
@@ -132,6 +197,24 @@ namespace PS2Configr
             int number = int.Parse(generated);
 
             return number;
+        }
+
+        public static string GetSafeGameName(string PathName)
+        {
+            foreach (char c in Path.GetInvalidPathChars())
+                PathName = PathName.Replace(c.ToString(), string.Empty);
+
+            foreach (char c in Path.GetInvalidFileNameChars())
+                PathName = PathName.Replace(c.ToString(), string.Empty);
+
+            return PathName;
+        }
+
+        public static string GetRelativePath(string filePath)
+        {
+            var fileUri = new Uri(filePath);
+            var referenceUri = new Uri(Environment.CurrentDirectory + @"\");
+            return referenceUri.MakeRelativeUri(fileUri).ToString().Replace("%20", " ").Replace("/", @"\");
         }
     }
 }

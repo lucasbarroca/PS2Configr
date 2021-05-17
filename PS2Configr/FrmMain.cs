@@ -20,7 +20,7 @@ namespace PS2Configr
         }
 
         public List<Game> games = Program.Games;
-        public void LoadGames()
+        public void RepopulateGamesList()
         {
             // Fill list
             gList.Items.Clear();
@@ -30,73 +30,23 @@ namespace PS2Configr
 
         public void SaveGames()
         {
-            using (FileStream fs = File.Open("config.xml", FileMode.Create))
-                new XmlSerializer(games.GetType()).Serialize(fs, games);
+            Program.SaveConfig();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // Games list events
             gList.DoubleClick += GList_DoubleClick;
             gList.MouseClick += GList_MouseClick;
 
             gList.DragEnter += GList_DragEnter;
             gList.DragDrop += GList_DragDrop;
-
-            // Check app needed
-            if (!Directory.Exists("Configs"))
-                Directory.CreateDirectory("Configs");
-
-            bool settingsOK = false;
-            while (!settingsOK) {
-                if (!string.IsNullOrEmpty(Properties.Settings.Default.PCSX2Path))
-                    settingsOK = File.Exists(Path.GetFullPath(Properties.Settings.Default.PCSX2Path));
-
-                if (!settingsOK)
-                {
-                    MessageBox.Show("You need to configure settings!", "Settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    new FrmSettings().ShowDialog();
-                }
-            }
-
-            // LoadGames
-            LoadGames();
-
-            // Check command line
-            List<string> arguments = new List<string>(Environment.GetCommandLineArgs());
-
-            foreach (string arg in arguments)
-            {
-                if (arg == "-id")
-                {
-                    int gid;
-                    if (int.TryParse(arg, out gid))
-                        games[gid].Launch();
-
-                    Environment.Exit(0);
-                }
-                else if (arg == "-name" || arg == "-config")
-                {
-                    foreach (Game g in games)
-                    {
-                        if (g.Name == arg)
-                        {
-                            if (arg == "-name")
-                            {
-                                g.Launch();
-                            }
-                            else
-                            {
-                                g.LaunchConfig();
-                            }
-                        }
-                    }
-
-                    Environment.Exit(0);
-                }
-
-            }          
+        
+            // Populate games list
+            RepopulateGamesList();
         }
 
+    #region "Games List"
         private void GList_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
@@ -117,7 +67,7 @@ namespace PS2Configr
             string[] s = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             int i;
             for (i = 0; i < s.Length; i++)
-                new FrmAddGame(PS2ConfigrFunctions.GetRelativePath(s[i])).ShowDialog();
+                new FrmAddGame(Program.GetRelativePath(s[i])).ShowDialog();
         }
 
         private void GList_DoubleClick(object sender, EventArgs e)
@@ -125,7 +75,9 @@ namespace PS2Configr
             if (gList.SelectedIndices.Count > 0)
                 games[gList.SelectedIndices[0]].Launch();
         }
+        #endregion
 
+    #region "Form Components"
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             new FrmSettings().ShowDialog();
@@ -145,7 +97,8 @@ namespace PS2Configr
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            LoadGames();
+            Program.LoadConfig();
+            RepopulateGamesList();
         }
 
         private void optionsToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -166,7 +119,7 @@ namespace PS2Configr
 
                 games.RemoveAt(gList.SelectedIndices[0]);
                 SaveGames();
-                LoadGames();
+                RepopulateGamesList();
             }
         }
 
@@ -186,28 +139,38 @@ namespace PS2Configr
         {
 
         }
-    }
+        #endregion
 
-    public static class PS2ConfigrFunctions
-    {
-        public static string GetSafeGameName(string PathName)
+        private void launchGamebyUniqueIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            foreach (char c in Path.GetInvalidPathChars())
-                PathName = PathName.Replace(c.ToString(), string.Empty);
-
-            foreach (char c in Path.GetInvalidFileNameChars())
-                PathName = PathName.Replace(c.ToString(), string.Empty);
-
-            return PathName;
+            if (gList.SelectedIndices.Count > 0)
+            {
+                Clipboard.SetText($"-id {games[gList.SelectedIndices[0]].UniqueID}");
+            }
         }
 
-        public static string GetRelativePath(string filePath)
+        private void launchGamebyNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var fileUri = new Uri(filePath);
-            var referenceUri = new Uri(Environment.CurrentDirectory + @"\");
-            return referenceUri.MakeRelativeUri(fileUri).ToString().Replace("%20", " ").Replace("/", @"\");
+            if (gList.SelectedIndices.Count > 0)
+            {
+                Clipboard.SetText($"-name {games[gList.SelectedIndices[0]].Name}");
+            }
         }
 
-    }
+        private void launchConfigbyUniqueIdToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (gList.SelectedIndices.Count > 0)
+            {
+                Clipboard.SetText($"-config {games[gList.SelectedIndices[0]].UniqueID}");
+            }
+        }
 
+        private void launchConfigbyNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (gList.SelectedIndices.Count > 0)
+            {
+                Clipboard.SetText($"-configname {games[gList.SelectedIndices[0]].Name}");
+            }
+        }
+    }
 }

@@ -52,11 +52,11 @@ namespace PS2Configr
 
         private void btAddGame_Click(object sender, EventArgs e)
         {
-            Program.frmMain.games.Add(new Game(PS2ConfigrFunctions.GetSafeGameName(txtGameName.Text), txtGamePath.Text, chkNoGUI.Checked, chkFull.Checked, chkGPad.Checked));
+            Program.frmMain.games.Add(new Game(Program.GetSafeGameName(txtGameName.Text), txtGamePath.Text, chkNoGUI.Checked, chkFull.Checked, chkGPad.Checked));
             Program.frmMain.games = Program.frmMain.games.OrderBy(q => q.Name).ToList();
 
             Program.frmMain.SaveGames();
-            Program.frmMain.LoadGames();
+            Program.frmMain.RepopulateGamesList();
 
             Close();
         }
@@ -71,7 +71,7 @@ namespace PS2Configr
             catch { }
 
             if (oGamePath.ShowDialog() == DialogResult.OK)
-                txtGamePath.Text = PS2ConfigrFunctions.GetRelativePath(oGamePath.FileName);
+                txtGamePath.Text = Program.GetRelativePath(oGamePath.FileName);
         }
 
     }
