@@ -52,7 +52,9 @@ namespace PS2Configr
 
         private void btAddGame_Click(object sender, EventArgs e)
         {
-            Program.frmMain.games.Add(new Game(Program.GetSafeGameName(txtGameName.Text), txtGamePath.Text, chkNoGUI.Checked, chkFull.Checked, chkGPad.Checked));
+            var newGame = new Game(Program.GetSafeGameName(txtGameName.Text), txtGamePath.Text, chkNoGUI.Checked, chkFull.Checked, chkGPad.Checked);
+            Program.GenerateUniqueGameId(Program.frmMain.games, newGame);
+            Program.frmMain.games.Add(newGame);
             Program.frmMain.games = Program.frmMain.games.OrderBy(q => q.Name).ToList();
 
             Program.frmMain.SaveGames();
