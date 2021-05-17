@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PS2Configr", "PS2Configr\PS2Configr.csproj", "{0EDFAFDC-98B4-4D4A-9A8B-AE747F79CCB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0EDFAFDC-98B4-4D4A-9A8B-AE747F79CCB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EDFAFDC-98B4-4D4A-9A8B-AE747F79CCB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EDFAFDC-98B4-4D4A-9A8B-AE747F79CCB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EDFAFDC-98B4-4D4A-9A8B-AE747F79CCB6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4FB0DE34-CF5B-4591-9566-01A2EBF277D1}
+	EndGlobalSection
+EndGlobal
