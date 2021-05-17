@@ -19,18 +19,9 @@ namespace PS2Configr
             InitializeComponent();
         }
 
-        public List<Game> games = new List<Game>();
+        public List<Game> games = Program.Games;
         public void LoadGames()
         {
-            if (File.Exists("config.xml"))
-                using (FileStream fs = File.OpenRead("config.xml"))
-                    games = (List<Game>)new XmlSerializer(games.GetType()).Deserialize(fs);
-
-            // Check config folders exists
-            foreach (Game g in games)
-                if (!Directory.Exists(@"Configs\" + g.Name))
-                    Directory.CreateDirectory(@"Configs\" + g.Name);
-
             // Fill list
             gList.Items.Clear();
             foreach (Game G in games)
@@ -219,59 +210,4 @@ namespace PS2Configr
 
     }
 
-    public class Game
-    {
-        public string Name;
-        public string File;
-
-        public bool NoGUI;
-        public bool Fullscreen;
-
-        public bool UseGlobalPad;
-
-        public Game()
-        {
-
-        }
-
-        public Game(string Name, string File, bool NoGUI, bool Fullscreen, bool UseGlobalPad)
-        {
-            this.Name = Name;
-            this.File = File;
-
-            this.NoGUI = NoGUI;
-            this.Fullscreen = Fullscreen;
-
-            this.UseGlobalPad = UseGlobalPad;
-        }
-
-        public void Launch()
-        {
-            if (UseGlobalPad && System.IO.File.Exists("LilyPad.ini"))
-                System.IO.File.Copy("LilyPad.ini", @"Configs\" + Name + @"\LilyPad.ini", true);
-
-            Process p = Process.Start(Properties.Settings.Default.PCSX2Path,
-                @"""" + Path.Combine(Properties.Settings.Default.DefaultDiskPath, File) + @"""" +
-                @" --cfgpath """ + Path.Combine(Environment.CurrentDirectory, @"Configs\" + Name) + @"""" +
-                
-                (NoGUI ? @" --nogui" : @" --console") +
-                (Fullscreen? @" --fullscreen" : @""));
-
-            // Invisible when launch
-            Program.frmMain.Hide();
-
-            // Visible again when closed
-            p.WaitForExit();
-            Program.frmMain.Show();
-        }
-
-        public void LaunchConfig()
-        {
-            if (UseGlobalPad && System.IO.File.Exists("LilyPad.ini"))
-                System.IO.File.Copy("LilyPad.ini", @"Configs\" + Name + @"\LilyPad.ini", true);
-
-            Process.Start(Properties.Settings.Default.PCSX2Path, 
-                @"--cfgpath """+ Path.Combine(Environment.CurrentDirectory, @"Configs\" + Name) + @"""");
-        }
-    }
 }
