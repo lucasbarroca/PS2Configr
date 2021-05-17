@@ -5,10 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 namespace PS2Configr
 {
@@ -139,7 +136,6 @@ namespace PS2Configr
         {
 
         }
-        #endregion
 
         private void launchGamebyUniqueIdToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -153,7 +149,7 @@ namespace PS2Configr
         {
             if (gList.SelectedIndices.Count > 0)
             {
-                Clipboard.SetText($"-name {games[gList.SelectedIndices[0]].Name}");
+                Clipboard.SetText($"-name \"{games[gList.SelectedIndices[0]].Name}\"");
             }
         }
 
@@ -169,8 +165,10 @@ namespace PS2Configr
         {
             if (gList.SelectedIndices.Count > 0)
             {
-                Clipboard.SetText($"-configname {games[gList.SelectedIndices[0]].Name}");
+                Clipboard.SetText($"-configname \"{games[gList.SelectedIndices[0]].Name}\"");
             }
         }
+        #endregion
+
     }
 }

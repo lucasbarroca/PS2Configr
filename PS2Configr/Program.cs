@@ -69,42 +69,56 @@ namespace PS2Configr
             {
                 if (arg == "-id" || arg == "-config")
                 {
-                    int uid = int.Parse(arg);
-                    foreach (Game g in Games)
-                    {
-                        if (g.UniqueID == uid)
+                    int nextId = arguments.FindIndex(a => a == arg) + 1;
+
+                    // Prevent missing arguments errors
+                    if (nextId < arguments.Count) {
+                        // Get argument value
+                        int uid = int.Parse(arguments[nextId]);
+                        foreach (Game g in Games)
                         {
-                            if (arg == "-id")
+                            if (g.UniqueID == uid)
                             {
-                                g.Launch();
-                            }
-                            else
-                            {
-                                g.LaunchConfig();
+                                if (arg == "-id")
+                                {
+                                    g.Launch();
+                                }
+                                else
+                                {
+                                    g.LaunchConfig();
+                                }
                             }
                         }
-                    }
 
-                    Environment.Exit(0);
+                        Environment.Exit(0);
+                    }
                 }
                 else if (arg == "-name" || arg == "-configname")
                 {
-                    foreach (Game g in Games)
+                    int nextId = arguments.FindIndex(a => a == arg) + 1;
+
+                    // Prevent missing arguments errors
+                    if (nextId < arguments.Count)
                     {
-                        if (g.Name == arg)
+                        // Get argument value
+                        string name = arguments[nextId];
+                        foreach (Game g in Games)
                         {
-                            if (arg == "-name")
+                            if (g.Name == name)
                             {
-                                g.Launch();
-                            }
-                            else
-                            {
-                                g.LaunchConfig();
+                                if (arg == "-name")
+                                {
+                                    g.Launch();
+                                }
+                                else
+                                {
+                                    g.LaunchConfig();
+                                }
                             }
                         }
-                    }
 
-                    Environment.Exit(0);
+                        Environment.Exit(0);
+                    }
                 }
             }
 
