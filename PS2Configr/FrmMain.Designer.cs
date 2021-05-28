@@ -43,15 +43,15 @@
             this.optionsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.configureInPCSX2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.gList = new System.Windows.Forms.ListView();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.copyStartupCommandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchGamebyUniqueIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchGamebyNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.launchConfigbyUniqueIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchConfigbyNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gList = new System.Windows.Forms.ListView();
             this.menuStrip1.SuspendLayout();
             this.rMenu.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +63,8 @@
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(403, 24);
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(7, 2, 0, 2);
+            this.menuStrip1.Size = new System.Drawing.Size(470, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -129,7 +130,8 @@
             this.toolStripSeparator4,
             this.removeToolStripMenuItem});
             this.rMenu.Name = "rMenu";
-            this.rMenu.Size = new System.Drawing.Size(201, 154);
+            this.rMenu.Size = new System.Drawing.Size(201, 132);
+            this.rMenu.Opening += new System.ComponentModel.CancelEventHandler(this.rMenu_Opening);
             // 
             // launchToolStripMenuItem
             // 
@@ -162,33 +164,6 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(197, 6);
             // 
-            // removeToolStripMenuItem
-            // 
-            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
-            this.removeToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.removeToolStripMenuItem.Text = "Remove";
-            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
-            // 
-            // gList
-            // 
-            this.gList.AllowDrop = true;
-            this.gList.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gList.FullRowSelect = true;
-            this.gList.HideSelection = false;
-            this.gList.Location = new System.Drawing.Point(12, 27);
-            this.gList.MultiSelect = false;
-            this.gList.Name = "gList";
-            this.gList.Size = new System.Drawing.Size(379, 392);
-            this.gList.TabIndex = 2;
-            this.gList.UseCompatibleStateImageBehavior = false;
-            this.gList.View = System.Windows.Forms.View.List;
-            this.gList.SelectedIndexChanged += new System.EventHandler(this.gList_SelectedIndexChanged);
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(197, 6);
-            // 
             // copyStartupCommandToolStripMenuItem
             // 
             this.copyStartupCommandToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -215,6 +190,11 @@
             this.launchGamebyNameToolStripMenuItem.Text = "Launch game (by Name)";
             this.launchGamebyNameToolStripMenuItem.Click += new System.EventHandler(this.launchGamebyNameToolStripMenuItem_Click);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(222, 6);
+            // 
             // launchConfigbyUniqueIdToolStripMenuItem
             // 
             this.launchConfigbyUniqueIdToolStripMenuItem.Name = "launchConfigbyUniqueIdToolStripMenuItem";
@@ -229,20 +209,44 @@
             this.launchConfigbyNameToolStripMenuItem.Text = "Launch config (by Name)";
             this.launchConfigbyNameToolStripMenuItem.Click += new System.EventHandler(this.launchConfigbyNameToolStripMenuItem_Click);
             // 
-            // toolStripSeparator6
+            // toolStripSeparator4
             // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(222, 6);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(197, 6);
+            // 
+            // removeToolStripMenuItem
+            // 
+            this.removeToolStripMenuItem.Name = "removeToolStripMenuItem";
+            this.removeToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.removeToolStripMenuItem.Text = "Remove";
+            this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
+            // 
+            // gList
+            // 
+            this.gList.AllowDrop = true;
+            this.gList.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.gList.FullRowSelect = true;
+            this.gList.HideSelection = false;
+            this.gList.Location = new System.Drawing.Point(14, 31);
+            this.gList.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.gList.MultiSelect = false;
+            this.gList.Name = "gList";
+            this.gList.Size = new System.Drawing.Size(442, 452);
+            this.gList.TabIndex = 2;
+            this.gList.UseCompatibleStateImageBehavior = false;
+            this.gList.View = System.Windows.Forms.View.List;
+            this.gList.SelectedIndexChanged += new System.EventHandler(this.gList_SelectedIndexChanged);
             // 
             // FrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(403, 431);
+            this.ClientSize = new System.Drawing.Size(470, 497);
             this.Controls.Add(this.gList);
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MaximizeBox = false;
             this.Name = "FrmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

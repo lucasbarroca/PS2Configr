@@ -13,16 +13,24 @@ namespace PS2Configr
     public partial class FrmAddGame : Form
     {
         public string GamePath;
+
         public FrmAddGame(string Path)
         {
             InitializeComponent();
 
-            GamePath = Path;
+            if (Path.EndsWith("/") || Path.EndsWith(@"\"))
+            {
+                GamePath = Path;
+            }
+            else
+            {
+                GamePath = Path + @"/";
+            }
         }
 
         private void FrmAddGame_Load(object sender, EventArgs e)
         {
-            txtGamePath.TextChanged += TxtGamePath_TextChanged; ; ;
+            txtGamePath.TextChanged += TxtGamePath_TextChanged;
 
             txtGamePath.Text = GamePath;
             //txtGameName.Text = Path.GetFileName(GamePath);
@@ -58,7 +66,7 @@ namespace PS2Configr
             Program.frmMain.games = Program.frmMain.games.OrderBy(q => q.Name).ToList();
 
             Program.frmMain.SaveGames();
-            Program.LoadConfig();
+            Program.LoadGamesList();
             Program.frmMain.RepopulateGamesList();
 
             Close();

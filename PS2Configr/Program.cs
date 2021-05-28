@@ -23,12 +23,18 @@ namespace PS2Configr
         [STAThread]
         static void Main()
         {
+            // Needed before any forms calling
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
             // Check app core needed before anything
             bool settingsOK = false;
             while (!settingsOK)
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.PCSX2Path))
+                {
                     settingsOK = File.Exists(Path.GetFullPath(Properties.Settings.Default.PCSX2Path));
+                }
 
                 if (!settingsOK)
                 {
@@ -50,7 +56,7 @@ namespace PS2Configr
             }
             else if (File.Exists("config.json")) // Load new configuration format
             {
-                LoadConfig();
+                LoadGamesList();
             }
 
             // Check for command line arguments
@@ -114,68 +120,23 @@ namespace PS2Configr
             }
 
             // Start main form
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            
             frmMain = new FrmMain();
             Application.Run(frmMain);
         }
 
-        public static void ConvertOldConfigToNew()
+        public static void SaveGamesList()
         {
-            // Load old config and replace some things...
-            var oldCfgData = File.ReadAllText("config.xml");
-            oldCfgData = oldCfgData.Replace("ArrayOfGame", "ArrayOfGameV1");
-            oldCfgData = oldCfgData.Replace("<Game>", "<GameV1>");
-            oldCfgData = oldCfgData.Replace("</Game>", "</GameV1>");
-
-            using (StringReader sr = new StringReader(oldCfgData))
-            {            
-                // Load old config
-                var oldCfg = (List<GameV1>)new XmlSerializer(new List<GameV1>().GetType()).Deserialize(sr);
-
-                // Populate new config
-                var newCfg = new List<Game>();
-                foreach (GameV1 v1Game in oldCfg)
-                {
-                    // Get game data
-                    var newGame = new Game(v1Game.Name, v1Game.File, v1Game.NoGUI, v1Game.Fullscreen, v1Game.UseGlobalPad);
-                    
-                    // Generate it a unique id
-                    GenerateUniqueGameId(newCfg, newGame);
-
-                    // Rename game name on list
-                    newGame.Name = Path.GetFileNameWithoutExtension(newGame.File);
-
-                    // Add to new game list
-                    newCfg.Add(newGame);
-
-                    // Rename game config folder
-                    Directory.Move($"Configs/{newGame.Name}", $"Configs/{newGame.UniqueID}");
-                }
-
-                // Save the config
-                Games = newCfg;
-                SaveConfig();
-
-                // Rename old config
-                File.Move("config.xml", "config.old.xml");
-
-                CreateNeededFolders();
-            }
+            SaveGamesListFile(Games);
         }
 
-        public static void SaveConfig()
-        {
-            SaveConfigFile(Games);
-        }
-
-        static void SaveConfigFile(List<Game> games)
+        static void SaveGamesListFile(List<Game> games)
         {
             string jsonData = JsonConvert.SerializeObject(games, Formatting.Indented);
             File.WriteAllText("config.json", jsonData);
         }
 
-        public static void LoadConfig()
+        public static void LoadGamesList()
         {
             string jsonData = File.ReadAllText("config.json");
             Games = JsonConvert.DeserializeObject<List<Game>>(jsonData);
@@ -234,21 +195,57 @@ namespace PS2Configr
         public static string GetSafeGameName(string PathName)
         {
             return PathName;
-
-            foreach (char c in Path.GetInvalidPathChars())
-                PathName = PathName.Replace(c.ToString(), string.Empty);
-
-            foreach (char c in Path.GetInvalidFileNameChars())
-                PathName = PathName.Replace(c.ToString(), string.Empty);
-
-            return PathName;
         }
 
-        public static string GetRelativePath(string filePath)
+        public static string GetRelativePath(string filename)
         {
-            var fileUri = new Uri(filePath);
-            var referenceUri = new Uri(Environment.CurrentDirectory + @"\");
-            return referenceUri.MakeRelativeUri(fileUri).ToString().Replace("%20", " ").Replace("/", @"\");
+            return Path.GetRelativePath(BaseDirectory, filename);
         }
+
+        // Convert XML config to new JSON format
+        public static void ConvertOldConfigToNew()
+        {
+            // Load old config and replace some things...
+            var oldCfgData = File.ReadAllText("config.xml");
+            oldCfgData = oldCfgData.Replace("ArrayOfGame", "ArrayOfGameV1");
+            oldCfgData = oldCfgData.Replace("<Game>", "<GameV1>");
+            oldCfgData = oldCfgData.Replace("</Game>", "</GameV1>");
+
+            using (StringReader sr = new StringReader(oldCfgData))
+            {
+                // Load old config
+                var oldCfg = (List<GameV1>)new XmlSerializer(new List<GameV1>().GetType()).Deserialize(sr);
+
+                // Populate new config
+                var newCfg = new List<Game>();
+                foreach (GameV1 v1Game in oldCfg)
+                {
+                    // Get game data
+                    var newGame = new Game(v1Game.Name, v1Game.File, v1Game.NoGUI, v1Game.Fullscreen, v1Game.UseGlobalPad);
+
+                    // Generate it a unique id
+                    GenerateUniqueGameId(newCfg, newGame);
+
+                    // Rename game name on list
+                    newGame.Name = Path.GetFileNameWithoutExtension(newGame.File);
+
+                    // Add to new game list
+                    newCfg.Add(newGame);
+
+                    // Rename game config folder
+                    Directory.Move($"Configs/{newGame.Name}", $"Configs/{newGame.UniqueID}");
+                }
+
+                // Save the config
+                Games = newCfg;
+                SaveGamesList();
+
+                // Rename old config
+                File.Move("config.xml", "config.old.xml");
+
+                CreateNeededFolders();
+            }
+        }
+
     }
 }

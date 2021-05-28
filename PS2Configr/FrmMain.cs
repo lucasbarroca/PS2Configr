@@ -27,7 +27,7 @@ namespace PS2Configr
 
         public void SaveGames()
         {
-            Program.SaveConfig();
+            Program.SaveGamesList();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -94,7 +94,7 @@ namespace PS2Configr
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Program.LoadConfig();
+            Program.LoadGamesList();
             RepopulateGamesList();
         }
 
@@ -170,5 +170,9 @@ namespace PS2Configr
         }
         #endregion
 
+        private void rMenu_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
     }
 }
