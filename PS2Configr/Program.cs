@@ -146,7 +146,7 @@ namespace PS2Configr
             string jsonData = File.ReadAllText(GetFullPath("config.json"));
             Games = JsonConvert.DeserializeObject<List<Game>>(jsonData);
 
-            //Games = Games.OrderBy(q => q.Name).ToList();
+            Games = Games.OrderBy(q => q.Name).ToList();
 
             CreateNeededFolders();
         }
