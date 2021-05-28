@@ -132,14 +132,21 @@ namespace PS2Configr
 
         static void SaveGamesListFile(List<Game> games)
         {
-            string jsonData = JsonConvert.SerializeObject(games, Formatting.Indented);
+            var jsonSettings = new JsonSerializerSettings();
+            jsonSettings.TypeNameHandling = TypeNameHandling.Auto;
+
+            string jsonData = JsonConvert.SerializeObject(games, Formatting.Indented, jsonSettings);
             File.WriteAllText(GetFullPath("config.json"), jsonData);
         }
 
         public static void LoadGamesList()
         {
+            Games = null;
+
             string jsonData = File.ReadAllText(GetFullPath("config.json"));
             Games = JsonConvert.DeserializeObject<List<Game>>(jsonData);
+
+            //Games = Games.OrderBy(q => q.Name).ToList();
 
             CreateNeededFolders();
         }
