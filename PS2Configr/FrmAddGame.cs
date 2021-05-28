@@ -45,7 +45,7 @@ namespace PS2Configr
         {
             try
             {
-                txtGameName.Text = Path.GetFileNameWithoutExtension(Path.GetFullPath(txtGamePath.Text));
+                txtGameName.Text = Path.GetFileNameWithoutExtension(Program.GetFullPath(txtGamePath.Text));
             }
             catch
             {
@@ -76,8 +76,8 @@ namespace PS2Configr
         {
             try
             {
-                oGamePath.InitialDirectory = Path.GetDirectoryName(Path.GetFullPath(txtGamePath.Text));
-                oGamePath.FileName = Path.GetFileName(Path.GetFullPath(txtGamePath.Text));
+                oGamePath.InitialDirectory = Path.GetDirectoryName(Program.GetFullPath(txtGamePath.Text));
+                oGamePath.FileName = Path.GetFileName(Program.GetFullPath(txtGamePath.Text));
             }
             catch { }
 

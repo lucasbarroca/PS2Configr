@@ -35,17 +35,28 @@ namespace PS2Configr
             this.UseGlobalPad = UseGlobalPad;
         }
 
+        public string GetConfigDir()
+        {
+            return Program.GetFullPath("Configs") + Path.DirectorySeparatorChar + UniqueID;
+    }
+
         public void Launch()
         {
             // Copy global pad configs to game config folder
-            if (UseGlobalPad && System.IO.File.Exists("LilyPad.ini"))
-                System.IO.File.Copy("LilyPad.ini", @"Configs\" + UniqueID + @"\LilyPad.ini", true);
+            string gamepadFile = "LilyPad.ini";
+
+            if (UseGlobalPad && System.IO.File.Exists(Program.GetFullPath(gamepadFile)))
+            {
+                System.IO.File.Copy(Program.GetFullPath(gamepadFile), Path.Combine(GetConfigDir(), gamepadFile), true);
+            }
 
             // Start game and get it's process
-            Process p = Process.Start(Properties.Settings.Default.PCSX2Path,
-                @"""" + Path.Combine(Properties.Settings.Default.DefaultDiskPath, File) + @"""" +
-                @" --cfgpath """ + Path.Combine(Environment.CurrentDirectory, @"Configs\" + UniqueID) + @"""" +
+            string emulatorFile = Program.GetFullPath(Properties.Settings.Default.PCSX2Path);
+            string gameFile = Path.Combine(Properties.Settings.Default.DefaultDiskPath, File);
 
+            Process p = Process.Start(emulatorFile,
+                $"\"{gameFile}\"" +
+                $" --cfgpath \"{Program.GetFullPath("Configs")}/{UniqueID}\"" +
                 (NoGUI ? @" --nogui" : @" --console") +
                 (Fullscreen ? @" --fullscreen" : @""));
 
@@ -60,12 +71,19 @@ namespace PS2Configr
         public void LaunchConfig()
         {
             // Copy global pad configs to game config folder
-            if (UseGlobalPad && System.IO.File.Exists("LilyPad.ini"))
-                System.IO.File.Copy("LilyPad.ini", @"Configs\" + UniqueID + @"\LilyPad.ini", true);
+            string gamepadFile = "LilyPad.ini";
+
+            if (UseGlobalPad && System.IO.File.Exists(Program.GetFullPath(gamepadFile)))
+            {
+                System.IO.File.Copy(Program.GetFullPath(gamepadFile), Path.Combine(GetConfigDir(), gamepadFile), true);
+            }
 
             // Start emulator with selected game for configuration purposes
-            Process.Start(Properties.Settings.Default.PCSX2Path,
-                @"--cfgpath """ + Path.Combine(Environment.CurrentDirectory, @"Configs\" + UniqueID) + @"""");
+            string emulatorFile = Program.GetFullPath(Properties.Settings.Default.PCSX2Path);
+            string gameFile = Path.Combine(Properties.Settings.Default.DefaultDiskPath, File);
+
+            Process p = Process.Start(emulatorFile,
+                $"--cfgpath \"{Program.GetFullPath("Configs")}/{UniqueID}\"");
         }
     }
 

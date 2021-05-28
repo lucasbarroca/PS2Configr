@@ -11,7 +11,7 @@ namespace PS2Configr
 {
     static class Program
     {
-        public static string BaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        public static string BaseDirectory = AppContext.BaseDirectory;
 
         public static List<Game> Games = new List<Game>();
 
@@ -33,7 +33,7 @@ namespace PS2Configr
             {
                 if (!string.IsNullOrEmpty(Properties.Settings.Default.PCSX2Path))
                 {
-                    settingsOK = File.Exists(Path.GetFullPath(Properties.Settings.Default.PCSX2Path));
+                    settingsOK = File.Exists(GetFullPath(Properties.Settings.Default.PCSX2Path));
                 }
 
                 if (!settingsOK)
@@ -43,18 +43,18 @@ namespace PS2Configr
                 }
             }
 
-            if (!Directory.Exists("Configs"))
+            if (!Directory.Exists(GetFullPath("Configs")))
             {
-                Directory.CreateDirectory("Configs");
+                Directory.CreateDirectory(GetFullPath("Configs"));
             }
 
             // Load Games list
             // Check for old format config file
-            if (File.Exists("config.xml"))
+            if (File.Exists(GetFullPath("config.xml")))
             {
                 ConvertOldConfigToNew();
             }
-            else if (File.Exists("config.json")) // Load new configuration format
+            else if (File.Exists(GetFullPath("config.json"))) // Load new configuration format
             {
                 LoadGamesList();
             }
@@ -133,12 +133,12 @@ namespace PS2Configr
         static void SaveGamesListFile(List<Game> games)
         {
             string jsonData = JsonConvert.SerializeObject(games, Formatting.Indented);
-            File.WriteAllText("config.json", jsonData);
+            File.WriteAllText(GetFullPath("config.json"), jsonData);
         }
 
         public static void LoadGamesList()
         {
-            string jsonData = File.ReadAllText("config.json");
+            string jsonData = File.ReadAllText(GetFullPath("config.json"));
             Games = JsonConvert.DeserializeObject<List<Game>>(jsonData);
 
             CreateNeededFolders();
@@ -149,13 +149,15 @@ namespace PS2Configr
             // Create games config folders if not exists
             foreach (Game g in Games)
             {
-                if (!Directory.Exists(@"Configs\" + g.UniqueID))
+                string gameCfgDir =$@"{GetFullPath("Configs")}\" + g.UniqueID;
+
+                if (!Directory.Exists(gameCfgDir))
                 {
-                    Directory.CreateDirectory(@"Configs\" + g.UniqueID);
+                    Directory.CreateDirectory(gameCfgDir);
                 }
             }
         }
-
+  
         public static void GenerateUniqueGameId(List<Game> gameList, Game game)
         {
             bool NumberIsUnique = false;
@@ -176,7 +178,7 @@ namespace PS2Configr
 
         static int GenerateUniqueNumber(int length) {
             const string chars = "0123456789";
-            
+
             var random = new Random();
             string generated = new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
@@ -184,7 +186,7 @@ namespace PS2Configr
             // don't permit numbers started with 0
             if (generated.StartsWith("0"))
             {
-                generated = chars[random.Next(1, chars.Length)] + generated.Substring(1, generated.Length -1);
+                generated = chars[random.Next(1, chars.Length)] + generated.Substring(1, generated.Length - 1);
             }
 
             int number = int.Parse(generated);
@@ -192,21 +194,28 @@ namespace PS2Configr
             return number;
         }
 
+        
         public static string GetSafeGameName(string PathName)
         {
             return PathName;
         }
 
-        public static string GetRelativePath(string filename)
+        public static string GetFullPath(string path)
         {
-            return Path.GetRelativePath(BaseDirectory, filename);
+            return Path.GetFullPath(path, BaseDirectory);
+        }
+
+        // Get filename relative to app directory
+        public static string GetRelativePath(string path)
+        {
+            return Path.GetRelativePath(BaseDirectory, path);
         }
 
         // Convert XML config to new JSON format
         public static void ConvertOldConfigToNew()
         {
             // Load old config and replace some things...
-            var oldCfgData = File.ReadAllText("config.xml");
+            var oldCfgData = File.ReadAllText(GetFullPath("config.xml"));
             oldCfgData = oldCfgData.Replace("ArrayOfGame", "ArrayOfGameV1");
             oldCfgData = oldCfgData.Replace("<Game>", "<GameV1>");
             oldCfgData = oldCfgData.Replace("</Game>", "</GameV1>");
@@ -233,7 +242,7 @@ namespace PS2Configr
                     newCfg.Add(newGame);
 
                     // Rename game config folder
-                    Directory.Move($"Configs/{newGame.Name}", $"Configs/{newGame.UniqueID}");
+                    Directory.Move($"{GetFullPath("Configs")}/{newGame.Name}", $"{GetFullPath("Configs")}/{newGame.UniqueID}");
                 }
 
                 // Save the config
@@ -241,7 +250,7 @@ namespace PS2Configr
                 SaveGamesList();
 
                 // Rename old config
-                File.Move("config.xml", "config.old.xml");
+                File.Move(GetFullPath("config.xml"), GetFullPath("config.old.xml"));
 
                 CreateNeededFolders();
             }

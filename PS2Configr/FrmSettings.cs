@@ -54,8 +54,8 @@ namespace PS2Configr
         {
             try
             {
-                oEmuPath.InitialDirectory = Path.GetDirectoryName(Path.GetFullPath(txtEmuPath.Text));
-                oEmuPath.FileName = Path.GetFileName(Path.GetFullPath(txtEmuPath.Text));
+                oEmuPath.InitialDirectory = Path.GetDirectoryName(Program.GetFullPath(txtEmuPath.Text));
+                oEmuPath.FileName = Path.GetFileName(Program.GetFullPath(txtEmuPath.Text));
             }
             catch { }
 
