@@ -63,7 +63,7 @@ namespace PS2Configr
 
             Program.frmMain.SaveGames();
             Program.LoadGamesList();
-            Program.frmMain.RepopulateGamesList();
+            Program.frmMain.RepopulateGamesList(Program.Games.FindIndex(g => g.UniqueID == newGame.UniqueID));
 
             Close();
         }

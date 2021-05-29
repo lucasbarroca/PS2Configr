@@ -68,8 +68,13 @@ namespace PS2Configr
 
             }
 
+            var selectedId = Program.Games[gID].UniqueID;
+
+            Program.Games = Program.Games.OrderBy(q => q.Name).ToList();
+
             Program.frmMain.SaveGames();
-            Program.frmMain.RepopulateGamesList();
+
+            Program.frmMain.RepopulateGamesList(Program.Games.FindIndex(g => g.UniqueID == selectedId));
 
             Close();
         }

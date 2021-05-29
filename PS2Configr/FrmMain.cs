@@ -15,12 +15,22 @@ namespace PS2Configr
         {
             InitializeComponent();
         }
-        public void RepopulateGamesList()
+        public void RepopulateGamesList(int selectedId = -1)
         {
             // Fill list
             gList.Items.Clear();
             foreach (Game G in Program.Games)
-                gList.Items.Add("[" + G.UniqueID + "] " + G.Name);
+            {
+                gList.Items.Add("[" + Program.Games.IndexOf(G) + "] " + G.Name);
+            }
+
+            // Scroll to item
+            if (selectedId > -1)
+            {
+                gList.Select();
+                gList.Items[selectedId].Selected = true;
+                gList.EnsureVisible(selectedId);
+            }
         }
 
         public void SaveGames()
@@ -106,23 +116,31 @@ namespace PS2Configr
         {
             if (gList.SelectedIndices.Count > 0)
             {
+                var idToRemove = gList.SelectedIndices[0];
+
                 try
                 {
-                    Directory.Delete(@"Configs\" + Program.Games[gList.SelectedIndices[0]].Name);
+                    Directory.Delete(@"Configs\" + Program.Games[idToRemove].UniqueID);
                 }
                 catch { }
 
-                Program.Games.RemoveAt(gList.SelectedIndices[0]);
+                Program.Games.RemoveAt(idToRemove);
                 SaveGames();
-                RepopulateGamesList();
+                RepopulateGamesList(idToRemove > 0 ? idToRemove - 1 : (Program.Games.Count > 1 ? 0 : -1));
             }
         }
 
         private void clearUnusedFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (string d in Directory.GetDirectories("Configs"))
-                if (Program.Games.Find(g => g.Name == d.Replace(@"Configs\", "")) == null)
-                    Directory.Delete(d);
+            {
+                var dir = d.Replace(@"Configs\", "");
+
+                if (Program.Games.FindIndex(g => g.UniqueID.ToString() == dir) == -1)
+                {
+                    Directory.Delete(d, true);
+                }
+            }
         }
 
         private void addGameToolStripMenuItem_Click(object sender, EventArgs e)
