@@ -28,7 +28,7 @@ namespace PS2Configr
 
             Text = "Game Options: [" + gID + "]";
 
-            txtGamePath.Text = Program.Games[gID].File;
+            txtGamePath.Text = Program.Games[gID].ROM;
             txtGameName.Text = Program.Games[gID].Name;
 
             chkNoGUI.Checked = Program.Games[gID].NoGUI;
@@ -51,7 +51,7 @@ namespace PS2Configr
 
         private void btSave_Click(object sender, EventArgs e)
         {
-            Program.Games[gID].File = txtGamePath.Text;
+            Program.Games[gID].ROM = txtGamePath.Text;
             Program.Games[gID].Name = Program.GetSafeGameName(txtGameName.Text);
 
             Program.Games[gID].NoGUI= chkNoGUI.Checked;

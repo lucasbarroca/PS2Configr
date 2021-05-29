@@ -43,10 +43,14 @@ namespace PS2Configr
                 }
             }
 
-            if (!Directory.Exists(GetFullPath("Configs")))
-            {
-                Directory.CreateDirectory(GetFullPath("Configs"));
-            }
+            // Create needed directories
+            Directory.CreateDirectory(GetFullPath("configs"));
+            Directory.CreateDirectory(GetFullPath("bios"));
+            Directory.CreateDirectory(GetFullPath("snaps"));
+            Directory.CreateDirectory(GetFullPath("sstates"));
+            Directory.CreateDirectory(GetFullPath("memcards"));
+            Directory.CreateDirectory(GetFullPath("cheats"));
+            Directory.CreateDirectory(GetFullPath("cheats_ws"));
 
             // Load Games list
             // Check for old format config file
@@ -69,7 +73,8 @@ namespace PS2Configr
                     int nextId = arguments.FindIndex(a => a == arg) + 1;
 
                     // Prevent missing arguments errors
-                    if (nextId < arguments.Count) {
+                    if (nextId < arguments.Count)
+                    {
                         // Get argument value
                         int uid = int.Parse(arguments[nextId]);
                         foreach (Game g in Games)
@@ -120,7 +125,7 @@ namespace PS2Configr
             }
 
             // Start main form
-            
+
             frmMain = new FrmMain();
             Application.Run(frmMain);
         }
@@ -157,7 +162,7 @@ namespace PS2Configr
             // Create games config folders if not exists
             foreach (Game g in Games)
             {
-                string gameCfgDir =$@"{GetFullPath("Configs")}\" + g.UniqueID;
+                string gameCfgDir =$@"{GetFullPath("configs")}\" + g.UniqueID;
 
                 if (!Directory.Exists(gameCfgDir))
                 {
@@ -244,13 +249,13 @@ namespace PS2Configr
                     GenerateUniqueGameId(newCfg, newGame);
 
                     // Rename game name on list
-                    newGame.Name = Path.GetFileNameWithoutExtension(newGame.File);
+                    newGame.Name = Path.GetFileNameWithoutExtension(newGame.ROM);
 
                     // Add to new game list
                     newCfg.Add(newGame);
 
                     // Rename game config folder
-                    Directory.Move($"{GetFullPath("Configs")}/{newGame.Name}", $"{GetFullPath("Configs")}/{newGame.UniqueID}");
+                    Directory.Move($"{GetFullPath("configs")}/{newGame.Name}", $"{GetFullPath("configs")}/{newGame.UniqueID}");
                 }
 
                 // Save the config

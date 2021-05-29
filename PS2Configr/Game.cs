@@ -1,4 +1,7 @@
-﻿using System;
+﻿using IniParser;
+using IniParser.Model;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,7 +15,7 @@ namespace PS2Configr
     {
         public int UniqueID;
         public string Name;
-        public string File;
+        public string ROM;
 
         public bool NoGUI;
         public bool Fullscreen;
@@ -24,10 +27,10 @@ namespace PS2Configr
 
         }
 
-        public Game(string Name, string File, bool NoGUI, bool Fullscreen, bool UseGlobalPad)
+        public Game(string Name, string ROM, bool NoGUI, bool Fullscreen, bool UseGlobalPad)
         {
             this.Name = Name;
-            this.File = File;
+            this.ROM = ROM;
 
             this.NoGUI = NoGUI;
             this.Fullscreen = Fullscreen;
@@ -37,26 +40,21 @@ namespace PS2Configr
 
         public string GetConfigDir()
         {
-            return Program.GetFullPath("Configs") + Path.DirectorySeparatorChar + UniqueID;
+            return Program.GetFullPath("configs") + Path.DirectorySeparatorChar + UniqueID;
     }
 
         public void Launch()
         {
-            // Copy global pad configs to game config folder
-            string gamepadFile = "LilyPad.ini";
-
-            if (UseGlobalPad && System.IO.File.Exists(Program.GetFullPath(gamepadFile)))
-            {
-                System.IO.File.Copy(Program.GetFullPath(gamepadFile), Path.Combine(GetConfigDir(), gamepadFile), true);
-            }
+            // Prepare game configs before
+            PrepareConfigFiles();
 
             // Start game and get it's process
             string emulatorFile = Program.GetFullPath(Properties.Settings.Default.PCSX2Path);
-            string gameFile = Path.Combine(Properties.Settings.Default.DefaultDiskPath, File);
+            string gameFile = Path.Combine(Properties.Settings.Default.DefaultDiskPath, ROM);
 
             Process p = Process.Start(emulatorFile,
                 $"\"{gameFile}\"" +
-                $" --cfgpath \"{Program.GetFullPath("Configs")}/{UniqueID}\"" +
+                $" --cfgpath \"{Program.GetFullPath("configs")}/{UniqueID}\"" +
                 (NoGUI ? @" --nogui" : @" --console") +
                 (Fullscreen ? @" --fullscreen" : @""));
 
@@ -70,20 +68,50 @@ namespace PS2Configr
 
         public void LaunchConfig()
         {
-            // Copy global pad configs to game config folder
-            string gamepadFile = "LilyPad.ini";
-
-            if (UseGlobalPad && System.IO.File.Exists(Program.GetFullPath(gamepadFile)))
-            {
-                System.IO.File.Copy(Program.GetFullPath(gamepadFile), Path.Combine(GetConfigDir(), gamepadFile), true);
-            }
+            // Prepare game configs before
+            PrepareConfigFiles();
 
             // Start emulator with selected game for configuration purposes
             string emulatorFile = Program.GetFullPath(Properties.Settings.Default.PCSX2Path);
-            string gameFile = Path.Combine(Properties.Settings.Default.DefaultDiskPath, File);
 
-            Process p = Process.Start(emulatorFile,
-                $"--cfgpath \"{Program.GetFullPath("Configs")}/{UniqueID}\"");
+            Process.Start(emulatorFile,
+                $"--cfgpath \"{Program.GetFullPath("configs")}/{UniqueID}\"");
+        }
+
+        public void PrepareConfigFiles()
+        {
+            // Get folders ini file
+            string iniFilename = Program.GetFullPath($"{Program.GetFullPath("configs")}/{UniqueID}/PCSX2_ui.ini");
+
+            if (File.Exists(iniFilename))
+            {
+                var iniParser = new FileIniDataParser();
+                IniData foldersIni = iniParser.ReadFile(iniFilename);
+
+                // Configure PCSX2 Folders
+                foldersIni["Folders"]["Bios"] = EscapePathString(Program.GetFullPath("bios"));
+                foldersIni["Folders"]["Snapshots"] = EscapePathString(Program.GetFullPath("snaps"));
+                foldersIni["Folders"]["Savestates"] = EscapePathString(Program.GetFullPath("sstates"));
+                foldersIni["Folders"]["MemoryCards"] = EscapePathString(Program.GetFullPath("memcards"));
+                foldersIni["Folders"]["Cheats"] = EscapePathString(Program.GetFullPath("cheats"));
+                foldersIni["Folders"]["CheatsWS"] = EscapePathString(Program.GetFullPath("cheats_ws"));               
+
+                // Save folders ini file
+                iniParser.WriteFile(iniFilename, foldersIni);
+            }
+
+            // Copy global pad configs to game config folder
+            string gamepadFile = "LilyPad.ini";
+
+            if (UseGlobalPad && File.Exists(Program.GetFullPath(gamepadFile)))
+            {
+                File.Copy(Program.GetFullPath(gamepadFile), Path.Combine(GetConfigDir(), gamepadFile), true);
+            }
+        }
+
+        string EscapePathString(string path)
+        {
+            return JsonConvert.ToString(path);
         }
     }
 
