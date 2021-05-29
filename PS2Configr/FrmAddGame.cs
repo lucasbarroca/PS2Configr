@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace PS2Configr
@@ -14,17 +10,17 @@ namespace PS2Configr
     {
         public string GamePath;
 
-        public FrmAddGame(string Path)
+        public FrmAddGame(string path)
         {
             InitializeComponent();
 
-            if (Path.EndsWith("/") || Path.EndsWith(@"\"))
+            if (path.EndsWith("/") || path.EndsWith(@"\") || Path.GetExtension(path).Length > 0)
             {
-                GamePath = Path;
+                GamePath = path;
             }
             else
             {
-                GamePath = Path + @"/";
+                GamePath = path + @"/";
             }
         }
 
@@ -85,5 +81,9 @@ namespace PS2Configr
                 txtGamePath.Text = Program.GetRelativePath(oGamePath.FileName);
         }
 
+        private void txtGamePath_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

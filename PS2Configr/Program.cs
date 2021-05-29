@@ -137,8 +137,9 @@ namespace PS2Configr
 
             string jsonData = JsonConvert.SerializeObject(games, Formatting.Indented, jsonSettings);
             File.WriteAllText(GetFullPath("config.json"), jsonData);
-        }
 
+            CreateNeededFolders();
+        }
         public static void LoadGamesList()
         {
             Games = null;

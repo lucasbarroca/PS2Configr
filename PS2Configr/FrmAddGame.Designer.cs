@@ -44,24 +44,27 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Location = new System.Drawing.Point(14, 10);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(23, 13);
+            this.label1.Size = new System.Drawing.Size(25, 15);
             this.label1.TabIndex = 3;
             this.label1.Text = "File";
             // 
             // txtGameName
             // 
-            this.txtGameName.Location = new System.Drawing.Point(12, 64);
+            this.txtGameName.Location = new System.Drawing.Point(14, 74);
+            this.txtGameName.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtGameName.Name = "txtGameName";
-            this.txtGameName.Size = new System.Drawing.Size(375, 20);
+            this.txtGameName.Size = new System.Drawing.Size(437, 23);
             this.txtGameName.TabIndex = 2;
             // 
             // btAddGame
             // 
-            this.btAddGame.Location = new System.Drawing.Point(12, 113);
+            this.btAddGame.Location = new System.Drawing.Point(14, 130);
+            this.btAddGame.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btAddGame.Name = "btAddGame";
-            this.btAddGame.Size = new System.Drawing.Size(283, 34);
+            this.btAddGame.Size = new System.Drawing.Size(330, 39);
             this.btAddGame.TabIndex = 6;
             this.btAddGame.Text = "ADD GAME";
             this.btAddGame.UseVisualStyleBackColor = true;
@@ -69,9 +72,10 @@
             // 
             // btCancel
             // 
-            this.btCancel.Location = new System.Drawing.Point(301, 113);
+            this.btCancel.Location = new System.Drawing.Point(351, 130);
+            this.btCancel.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btCancel.Name = "btCancel";
-            this.btCancel.Size = new System.Drawing.Size(86, 34);
+            this.btCancel.Size = new System.Drawing.Size(100, 39);
             this.btCancel.TabIndex = 7;
             this.btCancel.Text = "CANCEL";
             this.btCancel.UseVisualStyleBackColor = true;
@@ -80,24 +84,28 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 48);
+            this.label2.Location = new System.Drawing.Point(14, 55);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 13);
+            this.label2.Size = new System.Drawing.Size(29, 15);
             this.label2.TabIndex = 12;
             this.label2.Text = "Title";
             // 
             // txtGamePath
             // 
-            this.txtGamePath.Location = new System.Drawing.Point(12, 25);
+            this.txtGamePath.Location = new System.Drawing.Point(14, 29);
+            this.txtGamePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.txtGamePath.Name = "txtGamePath";
-            this.txtGamePath.Size = new System.Drawing.Size(334, 20);
+            this.txtGamePath.Size = new System.Drawing.Size(389, 23);
             this.txtGamePath.TabIndex = 0;
+            this.txtGamePath.TextChanged += new System.EventHandler(this.txtGamePath_TextChanged_1);
             // 
             // btGamePath
             // 
-            this.btGamePath.Location = new System.Drawing.Point(352, 25);
+            this.btGamePath.Location = new System.Drawing.Point(411, 29);
+            this.btGamePath.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.btGamePath.Name = "btGamePath";
-            this.btGamePath.Size = new System.Drawing.Size(35, 20);
+            this.btGamePath.Size = new System.Drawing.Size(41, 23);
             this.btGamePath.TabIndex = 1;
             this.btGamePath.Text = "...";
             this.btGamePath.UseVisualStyleBackColor = true;
@@ -106,9 +114,10 @@
             // chkNoGUI
             // 
             this.chkNoGUI.AutoSize = true;
-            this.chkNoGUI.Location = new System.Drawing.Point(142, 90);
+            this.chkNoGUI.Location = new System.Drawing.Point(166, 104);
+            this.chkNoGUI.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkNoGUI.Name = "chkNoGUI";
-            this.chkNoGUI.Size = new System.Drawing.Size(130, 17);
+            this.chkNoGUI.Size = new System.Drawing.Size(137, 19);
             this.chkNoGUI.TabIndex = 4;
             this.chkNoGUI.Text = "Hide PCSX2 Interface";
             this.chkNoGUI.UseVisualStyleBackColor = true;
@@ -116,9 +125,10 @@
             // chkFull
             // 
             this.chkFull.AutoSize = true;
-            this.chkFull.Location = new System.Drawing.Point(12, 90);
+            this.chkFull.Location = new System.Drawing.Point(14, 104);
+            this.chkFull.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkFull.Name = "chkFull";
-            this.chkFull.Size = new System.Drawing.Size(124, 17);
+            this.chkFull.Size = new System.Drawing.Size(134, 19);
             this.chkFull.TabIndex = 3;
             this.chkFull.Text = "Launch in Fullscreen";
             this.chkFull.UseVisualStyleBackColor = true;
@@ -130,18 +140,19 @@
             // chkGPad
             // 
             this.chkGPad.AutoSize = true;
-            this.chkGPad.Location = new System.Drawing.Point(275, 90);
+            this.chkGPad.Location = new System.Drawing.Point(321, 104);
+            this.chkGPad.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.chkGPad.Name = "chkGPad";
-            this.chkGPad.Size = new System.Drawing.Size(112, 17);
+            this.chkGPad.Size = new System.Drawing.Size(122, 19);
             this.chkGPad.TabIndex = 5;
             this.chkGPad.Text = "Use global Lilypad";
             this.chkGPad.UseVisualStyleBackColor = true;
             // 
             // FrmAddGame
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(399, 159);
+            this.ClientSize = new System.Drawing.Size(465, 183);
             this.Controls.Add(this.chkGPad);
             this.Controls.Add(this.chkFull);
             this.Controls.Add(this.chkNoGUI);
@@ -153,6 +164,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtGameName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "FrmAddGame";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add Game";
