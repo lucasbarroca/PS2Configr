@@ -89,6 +89,13 @@ namespace PS2Configr
                 IniData foldersIni = iniParser.ReadFile(iniFilename);
 
                 // Configure PCSX2 Folders
+                foldersIni["Folders"]["UseDefaultBios"] = "disabled";
+                foldersIni["Folders"]["UseDefaultSnapshots"] = "disabled";
+                foldersIni["Folders"]["UseDefaultSavestates"] = "disabled";
+                foldersIni["Folders"]["UseDefaultMemoryCards"] = "disabled";
+                foldersIni["Folders"]["UseDefaultCheats"] = "disabled";
+                foldersIni["Folders"]["UseDefaultCheatsWS"] = "disabled";
+
                 foldersIni["Folders"]["Bios"] = EscapePathString(Program.GetFullPath("bios"));
                 foldersIni["Folders"]["Snapshots"] = EscapePathString(Program.GetFullPath("snaps"));
                 foldersIni["Folders"]["Savestates"] = EscapePathString(Program.GetFullPath("sstates"));
@@ -98,6 +105,22 @@ namespace PS2Configr
 
                 // Save folders ini file
                 iniParser.WriteFile(iniFilename, foldersIni);
+            }
+
+            // Get GSdx ini file
+            string GsdxIniFilename = Program.GetFullPath($"{Program.GetFullPath("configs")}/{UniqueID}/GSdx.ini");
+
+            if (File.Exists(GsdxIniFilename))
+            {
+                var iniParser = new FileIniDataParser();
+                IniData GsdxIni = iniParser.ReadFile(GsdxIniFilename);
+
+                // Configure PCSX2 Folders
+                GsdxIni["Settings"]["shaderfx_conf"] = EscapePathString($"{Program.GetFullPath("configs")}/{UniqueID}/shaders/GSdx_FX_Settings.ini");
+                GsdxIni["Settings"]["shaderfx_glsl"] = EscapePathString($"{Program.GetFullPath("configs")}/{UniqueID}/shaders/GSdx.fx");
+
+                // Save folders ini file
+                iniParser.WriteFile(GsdxIniFilename, GsdxIni);
             }
 
             // Copy global pad configs to game config folder
@@ -111,7 +134,7 @@ namespace PS2Configr
 
         string EscapePathString(string path)
         {
-            return JsonConvert.ToString(path);
+            return JsonConvert.ToString(path).Replace("\"", "");
         }
     }
 
