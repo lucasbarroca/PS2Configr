@@ -43,6 +43,7 @@
             this.optionsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.configureInPCSX2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.OpenFoldertoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStartupCommandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchGamebyUniqueIdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchGamebyNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,7 +68,6 @@
             this.menuStrip1.Size = new System.Drawing.Size(470, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
-            this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // fileToolStripMenuItem
             // 
@@ -127,12 +127,12 @@
             this.optionsToolStripMenuItem1,
             this.configureInPCSX2ToolStripMenuItem,
             this.toolStripSeparator3,
+            this.OpenFoldertoolStripMenuItem,
             this.copyStartupCommandToolStripMenuItem,
             this.toolStripSeparator4,
             this.removeToolStripMenuItem});
             this.rMenu.Name = "rMenu";
-            this.rMenu.Size = new System.Drawing.Size(201, 132);
-            this.rMenu.Opening += new System.ComponentModel.CancelEventHandler(this.rMenu_Opening);
+            this.rMenu.Size = new System.Drawing.Size(201, 154);
             // 
             // launchToolStripMenuItem
             // 
@@ -164,6 +164,13 @@
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(197, 6);
+            // 
+            // OpenFoldertoolStripMenuItem
+            // 
+            this.OpenFoldertoolStripMenuItem.Name = "OpenFoldertoolStripMenuItem";
+            this.OpenFoldertoolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.OpenFoldertoolStripMenuItem.Text = "Open config folder";
+            this.OpenFoldertoolStripMenuItem.Click += new System.EventHandler(this.OpenFoldertoolStripMenuItem_Click);
             // 
             // copyStartupCommandToolStripMenuItem
             // 
@@ -285,6 +292,7 @@
         private System.Windows.Forms.ToolStripMenuItem launchConfigbyUniqueIdToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem launchConfigbyNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem OpenFoldertoolStripMenuItem;
     }
 }
 

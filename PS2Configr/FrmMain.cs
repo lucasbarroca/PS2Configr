@@ -184,16 +184,13 @@ namespace PS2Configr
                 Clipboard.SetText($"-configname \"{Program.Games[gList.SelectedIndices[0]].Name}\"");
             }
         }
+        private void OpenFoldertoolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            if (gList.SelectedIndices.Count > 0)
+            {
+                Process.Start("explorer.exe", Program.GetFullPath($@"configs\{Program.Games[gList.SelectedIndices[0]].UniqueID}\"));
+            }
+        }
         #endregion
-
-        private void rMenu_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
     }
 }
