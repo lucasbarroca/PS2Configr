@@ -19,7 +19,7 @@ namespace PS2Configr
             InitializeComponent();
 
             gID = GameID;
-            oldName = Program.frmMain.games[gID].Name;
+            oldName = Program.Games[gID].Name;
         }
 
         private void FrmEditGame_Load(object sender, EventArgs e)
@@ -28,13 +28,13 @@ namespace PS2Configr
 
             Text = "Game Options: [" + gID + "]";
 
-            txtGamePath.Text = Program.frmMain.games[gID].File;
-            txtGameName.Text = Program.frmMain.games[gID].Name;
+            txtGamePath.Text = Program.Games[gID].File;
+            txtGameName.Text = Program.Games[gID].Name;
 
-            chkNoGUI.Checked = Program.frmMain.games[gID].NoGUI;
-            chkFull.Checked = Program.frmMain.games[gID].Fullscreen;
+            chkNoGUI.Checked = Program.Games[gID].NoGUI;
+            chkFull.Checked = Program.Games[gID].Fullscreen;
 
-            chkGPad.Checked = Program.frmMain.games[gID].UseGlobalPad;
+            chkGPad.Checked = Program.Games[gID].UseGlobalPad;
         }
 
         private void TxtGamePath_TextChanged(object sender, EventArgs e)
@@ -51,13 +51,13 @@ namespace PS2Configr
 
         private void btSave_Click(object sender, EventArgs e)
         {
-            Program.frmMain.games[gID].File = txtGamePath.Text;
-            Program.frmMain.games[gID].Name = Program.GetSafeGameName(txtGameName.Text);
+            Program.Games[gID].File = txtGamePath.Text;
+            Program.Games[gID].Name = Program.GetSafeGameName(txtGameName.Text);
 
-            Program.frmMain.games[gID].NoGUI= chkNoGUI.Checked;
-            Program.frmMain.games[gID].Fullscreen = chkFull.Checked;
+            Program.Games[gID].NoGUI= chkNoGUI.Checked;
+            Program.Games[gID].Fullscreen = chkFull.Checked;
 
-            Program.frmMain.games[gID].UseGlobalPad = chkGPad.Checked;
+            Program.Games[gID].UseGlobalPad = chkGPad.Checked;
 
             try
             {

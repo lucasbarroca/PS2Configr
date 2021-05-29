@@ -15,14 +15,12 @@ namespace PS2Configr
         {
             InitializeComponent();
         }
-
-        public List<Game> games = Program.Games;
         public void RepopulateGamesList()
         {
             // Fill list
             gList.Items.Clear();
-            foreach (Game G in games)
-                gList.Items.Add("[" + games.IndexOf(G) + "] " + G.Name);
+            foreach (Game G in Program.Games)
+                gList.Items.Add("[" + G.UniqueID + "] " + G.Name);
         }
 
         public void SaveGames()
@@ -70,7 +68,7 @@ namespace PS2Configr
         private void GList_DoubleClick(object sender, EventArgs e)
         {
             if (gList.SelectedIndices.Count > 0)
-                games[gList.SelectedIndices[0]].Launch();
+                Program.Games[gList.SelectedIndices[0]].Launch();
         }
         #endregion
 
@@ -83,13 +81,13 @@ namespace PS2Configr
         private void launchToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (gList.SelectedIndices.Count > 0)
-                games[gList.SelectedIndices[0]].Launch();
+                Program.Games[gList.SelectedIndices[0]].Launch();
         }
 
         private void configureInPCSX2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (gList.SelectedIndices.Count > 0)
-                games[gList.SelectedIndices[0]].LaunchConfig();
+                Program.Games[gList.SelectedIndices[0]].LaunchConfig();
         }
 
         private void reloadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -110,11 +108,11 @@ namespace PS2Configr
             {
                 try
                 {
-                    Directory.Delete(@"Configs\" + games[gList.SelectedIndices[0]].Name);
+                    Directory.Delete(@"Configs\" + Program.Games[gList.SelectedIndices[0]].Name);
                 }
                 catch { }
 
-                games.RemoveAt(gList.SelectedIndices[0]);
+                Program.Games.RemoveAt(gList.SelectedIndices[0]);
                 SaveGames();
                 RepopulateGamesList();
             }
@@ -123,7 +121,7 @@ namespace PS2Configr
         private void clearUnusedFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (string d in Directory.GetDirectories("Configs"))
-                if (games.Find(g => g.Name == d.Replace(@"Configs\", "")) == null)
+                if (Program.Games.Find(g => g.Name == d.Replace(@"Configs\", "")) == null)
                     Directory.Delete(d);
         }
 
@@ -141,7 +139,7 @@ namespace PS2Configr
         {
             if (gList.SelectedIndices.Count > 0)
             {
-                Clipboard.SetText($"-id {games[gList.SelectedIndices[0]].UniqueID}");
+                Clipboard.SetText($"-id {Program.Games[gList.SelectedIndices[0]].UniqueID}");
             }
         }
 
@@ -149,7 +147,7 @@ namespace PS2Configr
         {
             if (gList.SelectedIndices.Count > 0)
             {
-                Clipboard.SetText($"-name \"{games[gList.SelectedIndices[0]].Name}\"");
+                Clipboard.SetText($"-name \"{Program.Games[gList.SelectedIndices[0]].Name}\"");
             }
         }
 
@@ -157,7 +155,7 @@ namespace PS2Configr
         {
             if (gList.SelectedIndices.Count > 0)
             {
-                Clipboard.SetText($"-config {games[gList.SelectedIndices[0]].UniqueID}");
+                Clipboard.SetText($"-config {Program.Games[gList.SelectedIndices[0]].UniqueID}");
             }
         }
 
@@ -165,7 +163,7 @@ namespace PS2Configr
         {
             if (gList.SelectedIndices.Count > 0)
             {
-                Clipboard.SetText($"-configname \"{games[gList.SelectedIndices[0]].Name}\"");
+                Clipboard.SetText($"-configname \"{Program.Games[gList.SelectedIndices[0]].Name}\"");
             }
         }
         #endregion
